@@ -7,44 +7,44 @@ pipeline {
                 git branch: 'main',
                     changelog: false,
                     poll: false,
-                    url: 'https://github.com/LinkedInLearning/essential-jenkins-2468076.git'
+                    url: 'https://github.com/WasimDouri/jenkinsM.git'
             }
         }
         stage('Clean') {
             steps {
-                dir("${env.WORKSPACE}/Ch05/05_04-challenge-create-artifacts-and-reports"){
+                dir("${env.WORKSPACE}/src"){
                     echo "Cleaning the workspace..."
                     // Uncomment the following line after Maven is configured as a global tool
-                    // sh 'mvn clean'
+                     sh 'mvn clean'
                 }
             }
         }
         stage('Test') {
             steps {
-                dir("${env.WORKSPACE}/Ch05/05_04-challenge-create-artifacts-and-reports"){
+                dir("${env.WORKSPACE}/src"){
                     echo "Running tests..."
                     // Uncomment the following line after Maven is configured as a global tool
-                    // sh 'mvn test'
+                     sh 'mvn test'
                 }
             }
         }
         stage('Package') {
             steps {
-                dir("${env.WORKSPACE}/Ch05/05_04-challenge-create-artifacts-and-reports"){
+                dir("${env.WORKSPACE}/src"){
                     echo "Creating the JAR file..."
                     // Uncomment the following line after Maven is configured as a global tool
-                    // sh 'mvn package -DskipTests'
+                     sh 'mvn package -DskipTests'
                 }
             }
         }
     }
     post {
         always {
-            echo "Collecting jUnit test results..."
-            // Add jUnit report collection here...
+            junit allowEmptyResults: true,
+                testResults: '**/TEST-com.jenkinsM.AppTest.xml'
 
-            echo "Archiving the JAR file..."
-            // Add artifact archiving here...
+            archiveArtifacts allowEmptyArchive: true,
+                artifacts: '**/hello-1.0-SNAPSHOT.jar'
         }
     }
 }
